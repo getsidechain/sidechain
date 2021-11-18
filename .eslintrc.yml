@@ -1,0 +1,117 @@
+extends:
+  - eslint:all
+
+ignorePatterns:
+  - '*.d.ts'
+  - '*socket.io-client-cpp*'
+  - '*example*'
+
+parser: '@typescript-eslint/parser'
+
+plugins:
+  - '@typescript-eslint'
+
+globals:
+  process: true
+  console: true
+  window: true
+  WebSocket: true
+
+rules:
+  quotes:
+    - error
+    - single
+  jsx-quotes:
+    - error
+    - prefer-single
+  comma-dangle:
+    - error
+    - always-multiline
+  indent:
+    - error
+    - tab
+    - SwitchCase: 1
+  func-style:
+    - error
+    - declaration
+    - allowArrowFunctions: true
+  quote-props:
+    - error
+    - as-needed
+  function-call-argument-newline:
+    - error
+    - consistent
+  object-curly-spacing:
+    - error
+    - always
+  multiline-comment-style:
+    - error
+    - separate-lines
+  no-console:
+    - warn
+    - allow:
+        - info
+        - warn
+  prefer-destructuring:
+    - error
+    - array: false
+  spaced-comment:
+    - error
+    - always
+    - markers:
+        - '/'
+  object-property-newline: warn
+  no-negated-condition: warn
+  dot-location: 'off'
+  no-undefined: 'off'
+  init-declarations: 'off'
+  no-magic-numbers: 'off'
+  no-restricted-properties: 'off'
+  new-cap: 'off'
+  no-empty: 'off'
+  no-mixed-spaces-and-tabs: 'off'
+  consistent-this: 'off'
+  func-names: 'off'
+  no-await-in-loop: 'off'
+  max-lines: 'off'
+  complexity: 'off'
+  no-case-declarations: 'off'
+  max-params: 'off'
+  no-warning-comments: 'off'
+  guard-for-in: 'off'
+  no-continue: 'off'
+  function-paren-newline: 'off'
+  jsx-a11y/alt-text: 'off'
+  require-atomic-updates: 'off'
+  class-methods-use-this: 'off'
+  no-empty-function: 'off'
+  no-promise-executor-return: 'off'
+  max-statements: 'off'
+  newline-per-chained-call: 'off'
+  implicit-arrow-linebreak: 'off'
+  no-ternary: 'off'
+  no-void: 'off'
+  multiline-ternary: 'off'
+  no-extra-parens: 'off'
+  max-lines-per-function: 'off'
+  array-element-newline: 'off'
+  capitalized-comments: 'off'
+  no-tabs: 'off'
+  no-underscore-dangle: 'off'
+  camelcase: 'off'
+  sort-imports: 'off'
+  max-len: 'off'
+  sort-keys: 'off'
+  one-var: 'off'
+  space-before-function-paren: 'off'
+  padded-blocks: 'off'
+  id-length: 'off'
+  no-shadow: 'off'
+  no-implicit-globals: 'off'
+  strict: 'off'
+  import/no-anonymous-default-export: 'off'
+  no-unused-vars: 'off'
+  '@typescript-eslint/no-shadow': 'off'
+  '@typescript-eslint/no-unused-vars': 'error'
+  '@typescript-eslint/no-explicit-any': error
+  '@typescript-eslint/explicit-module-boundary-types': error
