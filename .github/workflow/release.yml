@@ -9,8 +9,10 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/create-release@v1
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Create release
+        uses: actions/create-release@v1
         id: release
         with:
           tag_name: ${{ github.event.client_payload.version }}
@@ -18,7 +20,8 @@ jobs:
           body: '${{ github.event.client_payload.notes }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: peter-evans/repository-dispatch@v1
+      - name: Notify SDK repository
+        uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           repository: getstudiobridge/sdk
