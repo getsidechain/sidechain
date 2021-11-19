@@ -30,5 +30,5 @@ jobs:
             {
               "version": ${{ toJson(github.event.client_payload.version) }},
               "run_id": ${{ toJson(github.event.client_payload.run_id) }},
-              "upload_url": ${{ toJson(steps.release.outputs.upload_ur)l }}
+              "upload_url": ${{ toJson(steps.release.outputs.upload_url) }}
             }
