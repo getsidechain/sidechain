@@ -19,7 +19,7 @@ jobs:
           release_name: v${{ github.event.client_payload.version }}
           body: '${{ github.event.client_payload.notes }}'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Notify SDK repository
         uses: peter-evans/repository-dispatch@v1
         with:
