@@ -23,7 +23,9 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           repository: getstudiobridge/sdk
           event-type: published
-          client-payload:
-            version: ${{ github.event.client_payload.version }}
-            run_id: ${{ github.event.client_payload.run_id }}
-            upload_url: ${{ steps.release.outputs.upload_url }}
+          client-payload: |
+            {
+              "version": "${{ github.event.client_payload.version }}",
+              "run_id": "${{ github.event.client_payload.run_id }}",
+              "upload_url": "${{ steps.release.outputs.upload_url }}"
+            }
