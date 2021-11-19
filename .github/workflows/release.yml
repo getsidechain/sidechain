@@ -16,7 +16,7 @@ jobs:
         id: release
         with:
           tag_name: ${{ github.event.client_payload.version }}
-          release_name: v${{ github.event.client_payload.version }}
+          release_name: ${{ github.event.client_payload.version }}
           body: '${{ github.event.client_payload.notes }}'
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
