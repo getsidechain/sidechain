@@ -1,7 +1,7 @@
 {
 	"name": "studiobridge",
 	"version": "0.1.0",
-	"license": "MIT",
+	"license": "GPL-3.0-or-later",
 	"main": "lib/api",
 	"bin": {
 		"studiobridge": "src/cli/index.ts"
