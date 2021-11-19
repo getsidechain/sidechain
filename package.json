@@ -4,11 +4,11 @@
 	"license": "GPL-3.0-or-later",
 	"main": "lib/api",
 	"bin": {
-		"studiobridge": "src/cli/index.ts"
+		"studiobridge": "lib/cli/index.js"
 	},
 	"scripts": {
 		"start": "ts-node src/cli/index.ts",
-		"build": "tsc",
+		"build": "tsc && chmod +x lib/cli/index.js",
 		"watch": "tsc -w"
 	},
 	"dependencies": {
