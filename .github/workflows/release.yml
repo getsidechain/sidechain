@@ -28,7 +28,7 @@ jobs:
           event-type: Publish
           client-payload: |
             {
-              "version": "${{ github.event.client_payload.version }}",
-              "run_id": "${{ github.event.client_payload.run_id }}",
-              "upload_url": "${{ steps.release.outputs.upload_url }}"
+              "version": ${{ toJson(github.event.client_payload.version) }},
+              "run_id": ${{ toJson(github.event.client_payload.run_id) }},
+              "upload_url": ${{ toJson(steps.release.outputs.upload_ur)l }}
             }
