@@ -107,8 +107,6 @@ async function spawnNew(): Promise<void> {
 		`${paramCaseName}/public/${newSnapshot2xName}`,
 	);
 
-	replaceInFile(`${paramCaseName}/package.json`, /\.\.\/frontend/gu, '/Users/arthur/Code/Music/studiobridge/frontend');
-
 	logger.info('Installing JavaScript dependencies using Yarn...');
 	await executeShell(`yarn --cwd ${paramCaseName}`);
 
