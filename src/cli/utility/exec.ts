@@ -5,7 +5,7 @@ function executeShell(command: string): Promise<void> {
 
 	return new Promise((resolve, reject) => {
 		const process = spawn(binary, args, {
-			stdio: 'inherit',
+			// stdio: 'inherit',
 		});
 
 		process.on('close', (code) => {

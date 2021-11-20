@@ -8,6 +8,11 @@ async function downloadFileToDisk(target: string, source: string): Promise<void>
 	return new Promise((resolve) => file.on('close', resolve));
 }
 
+function replaceInFile(file: string, pattern: string | RegExp, substitution: string): void {
+	const text = fs.readFileSync(file).toString();
+	fs.writeFileSync(file, text.replace(pattern, substitution));
+}
+
 function remove(path: string): Promise<void> {
 	return new Promise((resolve, reject) => {
 		fs.rm(path, { recursive: true }, (error) => {
@@ -21,4 +26,4 @@ function remove(path: string): Promise<void> {
 	});
 }
 
-export { downloadFileToDisk, remove };
+export { downloadFileToDisk, replaceInFile, remove };

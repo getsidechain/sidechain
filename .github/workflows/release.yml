@@ -8,9 +8,23 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    container: node:lts
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Bump version
+        run: jq '.version = "${{ github.event.client_payload.version }}"' package.json
+      - name: Install dependencies
+        run: yarn
+      - name: Compile
+        run: yarn build
+      - name: Bundle
+        run: yarn pack
+      - name: Upload build tmp
+        uses: actions/upload-artifact@v2
+        with:
+          name: studiobridge-v${{ github.event.client_payload.version }}.tgz
+          path: studiobridge-v${{ github.event.client_payload.version }}.tgz
       - name: Create release
         uses: actions/create-release@v1
         id: release
