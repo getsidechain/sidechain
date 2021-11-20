@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     container: node:lts
     steps:
-      - name: Install JQ
-        run: apt update && apt install -y jq
+      - name: Install dependencies
+        run: apt update && apt install -y jq moreutils
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Bump version
