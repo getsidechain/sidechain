@@ -32,6 +32,11 @@ const prompts: PromptObject[] = [
 	},
 	{
 		type: 'text',
+		name: 'category',
+		message: 'In which category belongs your plugin?',
+	},
+	{
+		type: 'text',
 		name: 'bundleIdentifier',
 		message: 'What is the Apple bundle identifier of the plugin?',
 		initial: (_, { name }) => `com.mycompany.${paramCase(name)}`,
