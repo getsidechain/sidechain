@@ -2,13 +2,13 @@
 	"name": "studiobridge",
 	"version": "0.1.0",
 	"license": "MIT",
-	"main": "lib/src/api",
+	"main": "lib/api",
 	"bin": {
-		"studiobridge": "lib/src/cli/index.js"
+		"studiobridge": "lib/cli/index.js"
 	},
 	"scripts": {
 		"start": "ts-node src/cli/index.ts",
-		"build": "tsc && chmod +x lib/src/cli/index.js",
+		"build": "tsc && chmod +x lib/cli/index.js",
 		"watch": "tsc -w"
 	},
 	"dependencies": {
