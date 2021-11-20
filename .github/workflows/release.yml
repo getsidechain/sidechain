@@ -16,6 +16,7 @@ jobs:
         run: "sed -i 's/\\(\"version\": \"\\).*\"/\\1${{ github.event.client_payload.version }}\"/g' package.json"
       - name: Commit release
         uses: stefanzweifel/git-auto-commit-action@v4.12.0
+        id: commit
         with:
           commit_message: 'release: ${{ github.event.client_payload.version }}'
           file_pattern: package.json
@@ -36,6 +37,7 @@ jobs:
           tag_name: ${{ github.event.client_payload.version }}
           release_name: ${{ github.event.client_payload.version }}
           body: '${{ github.event.client_payload.notes }}'
+          commitish: ${{ steps.commit.outputs.commit_hash }}
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Notify SDK repository
