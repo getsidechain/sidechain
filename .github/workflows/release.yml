@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Bump version
-        run: "sed 's/\(\"version\": \"\).*\"/\1${{ github.event.client_payload.version }}\"/g' package.json"
+        run: "sed 's/\\(\"version\": \"\\).*\"/\\1${{ github.event.client_payload.version }}\"/g' package.json"
       - name: Commit release
         uses: stefanzweifel/git-auto-commit-action@v4.12.0
         with:
