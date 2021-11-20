@@ -1,24 +1,26 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - '**'
-  # repository_dispatch:
-  #   types:
-  #     - Release
+  repository_dispatch:
+    types:
+      - Release
 
 jobs:
   release:
     runs-on: ubuntu-latest
     container: node:lts
     steps:
-      - name: Install dependencies
-        run: apt update && apt install -y jq moreutils
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Bump version
-        run: jq '.version = "0.1.0"' package.json | sponge package.json
+        run: "sed 's/\(\"version\": \"\).*\"/\1${{ github.event.client_payload.version }}\"/g' package.json"
+      - name: Commit release
+        uses: stefanzweifel/git-auto-commit-action@v4.12.0
+        with:
+          commit_message: 'release: ${{ github.event.client_payload.version }}'
+          file_pattern: package.json
+          commit_user_name: ${{ secrets.RELEASE_COMMIT_USER_NAME }}
+          commit_user_email: ${{ secrets.RELEASE_COMMIT_USER_EMAIL }}
       - name: Install dependencies
         run: yarn
       - name: Compile
@@ -27,24 +29,24 @@ jobs:
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Publish NPM package
         run: yarn publish --non-interactive
-      # - name: Create release
-      #   uses: actions/create-release@v1
-      #   id: release
-      #   with:
-      #     tag_name: ${{ github.event.client_payload.version }}
-      #     release_name: ${{ github.event.client_payload.version }}
-      #     body: '${{ github.event.client_payload.notes }}'
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      # - name: Notify SDK repository
-      #   uses: peter-evans/repository-dispatch@v1
-      #   with:
-      #     token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      #     repository: getstudiobridge/sdk
-      #     event-type: Publish
-      #     client-payload: |
-      #       {
-      #         "version": ${{ toJson(github.event.client_payload.version) }},
-      #         "run_id": ${{ toJson(github.event.client_payload.run_id) }},
-      #         "upload_url": ${{ toJson(steps.release.outputs.upload_url) }}
-      #       }
+      - name: Create release
+        uses: actions/create-release@v1
+        id: release
+        with:
+          tag_name: ${{ github.event.client_payload.version }}
+          release_name: ${{ github.event.client_payload.version }}
+          body: '${{ github.event.client_payload.notes }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Notify SDK repository
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          repository: getstudiobridge/sdk
+          event-type: Publish
+          client-payload: |
+            {
+              "version": ${{ toJson(github.event.client_payload.version) }},
+              "run_id": ${{ toJson(github.event.client_payload.run_id) }},
+              "upload_url": ${{ toJson(steps.release.outputs.upload_url) }}
+            }
