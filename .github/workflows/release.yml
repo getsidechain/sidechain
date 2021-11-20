@@ -18,18 +18,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Bump version
-        run: jq '.version = "1.0.0"' package.json | sponge package.json
+        run: jq '.version = "0.1.0"' package.json | sponge package.json
       - name: Install dependencies
         run: yarn
       - name: Compile
         run: yarn build
-      - name: Bundle
-        run: yarn pack
-      - name: Upload build tmp
-        uses: actions/upload-artifact@v2
-        with:
-          name: studiobridge-v1.0.0.tgz
-          path: studiobridge-v1.0.0.tgz
+      - name: Authenticate with NPM
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      - name: Publish NPM package
+        run: yarn publish --non-interactive
       # - name: Create release
       #   uses: actions/create-release@v1
       #   id: release
