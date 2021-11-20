@@ -2,7 +2,6 @@
 	"name": "foobartestxyz",
 	"version": "0.0.0",
 	"license": "MIT",
-	"homepage": "https://reactjs.org/",
 	"bugs": "https://github.com/getstudiobridge/studiobridge/issues",
 	"repository": {
 		"type": "git",
