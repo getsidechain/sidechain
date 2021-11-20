@@ -18,7 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Bump version
-        run: cat <<< $(jq '.version = "1.0.0"' package.json) > package.json
+        run: jq '.version = "1.0.0"' package.json | sponge package.json
       - name: Install dependencies
         run: yarn
       - name: Compile
