@@ -2,8 +2,8 @@ import fs from 'fs';
 import prompt, { PromptObject } from 'prompts';
 import { paramCase, pascalCase } from 'change-case';
 
-import executeShell from '../utility/exec';
 import logger from '../logger';
+import { executeBinarySilent } from '../utility/exec';
 import { formatBinaryVSTID, generateUniqueVSTID } from './utility';
 import { remove, replaceInFile } from '../utility/files';
 
@@ -73,8 +73,8 @@ async function spawnNew(): Promise<void> {
 
 	console.info();
 	logger.info('Creating project files...');
-	await executeShell(`git clone git@github.com:getstudiobridge/example.git ${paramCaseName}`);
-	await remove(`${paramCaseName}/.git`);
+	await executeBinarySilent('git', 'clone', 'git@github.com:getstudiobridge/example.git', paramCaseName);
+	remove(`${paramCaseName}/.git`);
 
 	const cmakelistsTxt = `${paramCaseName}/CMakeLists.txt`;
 	replaceInFile(cmakelistsTxt, placeholders.name, pascalCaseName);
@@ -113,7 +113,7 @@ async function spawnNew(): Promise<void> {
 	);
 
 	logger.info('Installing JavaScript dependencies using Yarn...');
-	await executeShell(`yarn --cwd ${paramCaseName}`);
+	await executeBinarySilent('yarn', '--cwd', paramCaseName);
 
 	logger.info(`Done.
 

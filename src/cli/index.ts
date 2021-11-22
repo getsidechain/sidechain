@@ -2,18 +2,40 @@
 
 import yargs from 'yargs/yargs';
 
+import spawnGenerateParameters from './generate/parameters';
+import spawnGenerateSchema from './generate/schema';
 import spawnNew from './new';
 
 function main() {
 	const cli = yargs(process.argv.slice(2));
 
-	cli.command('new', 'Create a Studio Bridge project', () => {}, spawnNew).showHelpOnFail(false);
+	cli.command('new', 'Create a Studio Bridge project', () => {}, spawnNew);
+	cli.command('generate', 'Generate C++ code from TypeScript', (cli) => {
+		cli.option('o', {
+			demandOption: true,
+			desc: 'Output directory to generate C++ files in',
+			alias: 'output',
+		});
 
-	cli.strict();
-	cli.showHelpOnFail(true);
+		cli.command('schema [paths..]', 'Generate C++ definitions from TypeScript types', () => {}, spawnGenerateSchema);
+
+		cli.command(
+			'parameters <path>',
+			'Generate parameters C++ definitions from controller config',
+			() => {},
+			spawnGenerateParameters,
+		);
+
+		cli.strict();
+		cli.demandCommand();
+		cli.help();
+	});
+
+	cli.showHelpOnFail(false);
 	cli.demandCommand();
+	cli.strict();
 	cli.help();
-	cli.wrap(72);
+	cli.wrap(80);
 	cli.parse();
 }
 

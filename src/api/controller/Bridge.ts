@@ -1,23 +1,19 @@
-import EventEmitter from 'events';
-import TypedEventEmitter from 'typed-emitter';
-
 import NativeTransport from '../transport/NativeTransport';
 import SocketTransport from '../transport/SocketTransport';
 import Transport from '../transport/Transport';
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-type VarArs = any[];
+export type VarArs = unknown[];
 
-type Handler<Args extends VarArs, Result> = (...args: Args) => Result;
+export type Handler<Args extends VarArs, Result> = (...args: Args) => Result;
 
-type OpaqueHandler = Handler<unknown[], unknown>;
+export type OpaqueHandler = Handler<unknown[], unknown>;
 
-type PromiseHandle = {
+export type PromiseHandle = {
 	resolve: OpaqueHandler;
 	reject: (message: string) => void;
 };
 
-class BaseBridge<Events extends {}> extends (EventEmitter as { new <Events>(): TypedEventEmitter<Events> })<Events> {
+class Bridge {
 	private transport!: Transport;
 
 	private pendingCalls: { [key: string]: PromiseHandle } = {};
@@ -37,6 +33,7 @@ class BaseBridge<Events extends {}> extends (EventEmitter as { new <Events>(): T
 	}
 
 	register<Args extends VarArs, Result>(name: string, handler: Handler<Args, Result>): void {
+		// TODO: remove me
 		// @ts-expect-error
 		this.handlers[name] = handler;
 	}
@@ -52,6 +49,7 @@ class BaseBridge<Events extends {}> extends (EventEmitter as { new <Events>(): T
 			}
 
 			this.pendingCalls[name] = {
+				// TODO: remove me
 				// @ts-expect-error
 				resolve,
 				reject: (message) => reject(new Error(message)),
@@ -97,7 +95,7 @@ class BaseBridge<Events extends {}> extends (EventEmitter as { new <Events>(): T
 				break;
 
 			case 'resolve':
-				this.pendingCalls[method].resolve(args.slice(2));
+				this.pendingCalls[method].resolve(...args.slice(2));
 				delete this.pendingCalls[method];
 				break;
 
@@ -111,4 +109,4 @@ class BaseBridge<Events extends {}> extends (EventEmitter as { new <Events>(): T
 	}
 }
 
-export default BaseBridge;
+export default Bridge;
