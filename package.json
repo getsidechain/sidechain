@@ -1,5 +1,6 @@
 {
 	"name": "foobartestxyz",
+	"description": "Build audio plugins using JavaScript",
 	"version": "0.0.0",
 	"license": "MIT",
 	"bugs": "https://github.com/getstudiobridge/studiobridge/issues",
