@@ -72,6 +72,7 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 				this.state = state;
 				this.emit('stateUpdate', state);
 			});
+
 			this.bridge.register('setStateFromProcessorState', (state: ProcessorState) => {
 				this.initialProcessorState = state;
 				this.emit('processorStateUpdate', state);
@@ -82,7 +83,9 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 
 		if (this.config.managedState) {
 			this.state = await this.bridge.callWithResult('getState');
+			this.initialProcessorState = await this.bridge.callWithResult('getInitialProcessorState');
 			this.emit('stateUpdate', this.state);
+			this.emit('processorStateUpdate', this.initialProcessorState);
 		}
 	}
 
@@ -94,6 +97,7 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 	updateState(changes: Partial<State>): void {
 		Object.assign(this.state, changes);
 		this.bridge.call('setState', this.state);
+		this.emit('stateUpdate', this.state);
 	}
 }
 
