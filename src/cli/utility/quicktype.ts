@@ -6,7 +6,7 @@ import executeBinary from './exec';
 import { replaceInFile } from './files';
 
 function spawnQuicktype(...args: string[]): Promise<string> {
-	return executeBinary('./node_modules/.bin/quicktype', ...args);
+	return executeBinary(`${__dirname}/../../../node_modules/.bin/quicktype`, ...args);
 }
 
 function writeMultiSourceFile(code: string, directory: string): void {

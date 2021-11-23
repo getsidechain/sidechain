@@ -16,6 +16,7 @@ globals:
   console: true
   window: true
   WebSocket: true
+  __dirname: true
 
 rules:
   quotes:
