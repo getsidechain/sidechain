@@ -1,4 +1,11 @@
-import Bridge from './controller/Bridge';
-import Controller from './controller/Controller';
-
-export { Bridge, Controller };
+export { default as Bridge } from './controller/Bridge';
+export {
+	default as Controller,
+	ParameterTag,
+	ParameterValue,
+	ParametersValues,
+	ParametersConfig,
+	ControllerConfig,
+	ControllerEvents,
+} from './controller/Controller';
+export { ParameterConfig } from './schemas/ParameterConfig';
