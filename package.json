@@ -3,6 +3,10 @@
 	"description": "Build audio plugins using JavaScript",
 	"version": "0.0.0",
 	"license": "MIT",
+	"main": "lib/src/api",
+	"bin": {
+		"studiobridge": "lib/src/cli/index.js"
+	},
 	"bugs": "https://github.com/getstudiobridge/studiobridge/issues",
 	"repository": {
 		"type": "git",
@@ -15,13 +19,9 @@
 		"vst",
 		"react"
 	],
-	"main": "lib/api",
-	"bin": {
-		"studiobridge": "lib/cli/index.js"
-	},
 	"scripts": {
 		"start": "ts-node src/cli/index.ts",
-		"build": "tsc && chmod +x lib/cli/index.js",
+		"build": "tsc && chmod +x lib/src/cli/index.js",
 		"watch": "tsc -w"
 	},
 	"dependencies": {

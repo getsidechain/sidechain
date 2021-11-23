@@ -6,6 +6,7 @@ import logger from '../logger';
 import { executeBinarySilent } from '../utility/exec';
 import { formatBinaryVSTID, generateUniqueVSTID } from './utility';
 import { remove, replaceInFile } from '../utility/files';
+import { version } from '../../../package.json';
 
 const prompts: PromptObject[] = [
 	{
@@ -62,8 +63,6 @@ async function spawnNew(): Promise<void> {
 	const { name, vendor, website, email, category, bundleIdentifier } = await prompt(prompts, {
 		onCancel: () => process.exit(1),
 	});
-
-	const version = '1.0.0';
 
 	const processorUID = generateUniqueVSTID();
 	const controllerUID = generateUniqueVSTID();
