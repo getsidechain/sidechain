@@ -7,6 +7,9 @@
 	"bin": {
 		"studiobridge": "lib/src/cli/index.js"
 	},
+	"files": [
+		"lib"
+	],
 	"bugs": "https://github.com/getstudiobridge/studiobridge/issues",
 	"repository": {
 		"type": "git",
