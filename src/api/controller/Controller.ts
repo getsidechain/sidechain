@@ -1,5 +1,4 @@
-import EventEmitter from 'events';
-import TypedEventEmitter from 'typed-emitter';
+import { TypedEmitter } from 'tiny-typed-emitter';
 
 import Bridge from './Bridge';
 import { Enum, enumEntries } from '../utility/enum';
@@ -28,9 +27,9 @@ export type ControllerEvents<Parameter, State, ProcessorState> = {
 	processorStateUpdate: (state: ProcessorState) => void;
 };
 
-class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> extends (EventEmitter as {
-	new <Events>(): TypedEventEmitter<Events>;
-})<ControllerEvents<Parameter, State, ProcessorState>> {
+class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> extends TypedEmitter<
+	ControllerEvents<Parameter, State, ProcessorState>
+> {
 	state!: State;
 
 	initialProcessorState!: ProcessorState;
