@@ -1,7 +1,7 @@
 {
 	"name": "foobartestxyz",
 	"description": "Build audio plugins using JavaScript",
-	"version": "0.0.0",
+	"version": "1.1.4",
 	"license": "MIT",
 	"main": "lib/src/api",
 	"bin": {
