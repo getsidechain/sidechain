@@ -13,6 +13,13 @@ export type PromiseHandle = {
 	reject: (message: string) => void;
 };
 
+/**
+ * Bridge implements low-level functionnalities
+ * required for calling code between languages.
+ *
+ * It should not be used directly
+ * but can be used from {@link Controller.bridge | Controller.bridge}.
+ */
 class Bridge {
 	private transport!: Transport;
 
@@ -20,6 +27,14 @@ class Bridge {
 
 	private handlers: { [key: string]: OpaqueHandler } = {};
 
+	/**
+	 * Initiates the bridge's underlying transport
+	 * and indicate backend that the bridge
+	 * is ready to receive messages.
+	 *
+	 * This should not be called directly
+	 * but is called from {@link Controller.initialize | Controller.initialize()}.
+	 */
 	async open(): Promise<void> {
 		if ('studiobridge' in window) {
 			this.transport = new NativeTransport();
@@ -32,16 +47,46 @@ class Bridge {
 		this.call('handleBridgeReady');
 	}
 
+	/**
+	 * Register a JavaScript function that can be called from the C++ side.
+	 *
+	 * You can register JavaScript callbacks anytime, anywhere -
+	 * but a good starting point would be to extend the `Controller` class
+	 * and override the `initialize()` method to register your custom functions.
+	 *
+	 * If `callback` returns `undefined`, the C++ callback will never be executed.
+	 * This way you can reduce overhead when making one-way calls,
+	 * as returning values requires additional processing.
+	 *
+	 * @param name Name of the procedure.
+	 * @param handler Callback that will be invoked with the C++ arguments.
+	 */
 	register<Args extends VarArs, Result>(name: string, handler: Handler<Args, Result>): void {
 		// TODO: remove me
 		// @ts-expect-error
 		this.handlers[name] = handler;
 	}
 
+	/**
+	 * Call a registered C++ function without expecting a result.
+	 * This call is synchronous and doesn't return anything even if the C++ does.
+	 *
+	 * @param name Name of the procedure to call.
+	 * @param args Arbitrary arguments that will be passed to the C++ callback.
+	 */
 	call(name: string, ...args: unknown[]): void {
 		this.send('call', name, ...args);
 	}
 
+	/**
+	 * Call a C++ function expecting a result.
+	 *
+	 * @param name Name of the procedure to call.
+	 * @param args Arbitrary arguments that will be passed to the C++ callback
+	 * @returns A promise that will resolve with the C++ return value, if any,
+	 * and reject if the C++ throws. The promise will never resolve if the C++
+	 * returns a null-like value.
+	 */
 	callWithResult<Result>(name: string, ...args: unknown[]): Promise<Result> {
 		return new Promise<Result>((resolve, reject) => {
 			if (this.pendingCalls[name]) {

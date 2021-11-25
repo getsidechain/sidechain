@@ -1,3 +1,6 @@
+/**
+ * Configration to use when creating a managed parameter.
+ */
 export type ParameterConfig = {
 	title: string;
 	shortTitle: string;

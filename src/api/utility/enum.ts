@@ -1,3 +1,6 @@
+/**
+ * Workaround to simulate a type constraint to enum-likes.
+ */
 export type Enum = string;
 
 function enumKeys<T>(input: T): (keyof T)[] {

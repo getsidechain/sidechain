@@ -113,6 +113,7 @@ rules:
   strict: 'off'
   import/no-anonymous-default-export: 'off'
   no-unused-vars: 'off'
+  lines-around-comment: 'off'
   '@typescript-eslint/no-shadow': 'off'
   '@typescript-eslint/no-unused-vars': 'error'
   '@typescript-eslint/no-explicit-any': error

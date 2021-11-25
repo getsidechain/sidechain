@@ -4,18 +4,28 @@ import Bridge from './Bridge';
 import { Enum, enumEntries } from '../utility/enum';
 import { ParameterConfig } from '../schemas/ParameterConfig';
 
-export type ParameterTag = number;
+export type ParameterID = number;
 
 export type ParameterValue = number;
 
+/**
+ * Key / value map containing all parameters values.
+ */
 export type ParametersValues<Parameter extends Enum> = {
 	[key in Parameter]: ParameterValue;
 };
 
+/**
+ * Parameters configuration map,
+ * corresponding to the format of the `parameters.json` file.
+ */
 export type ParametersConfig<Parameter extends Enum> = {
 	[key in Parameter]: ParameterConfig;
 };
 
+/**
+ * Main configuration for the JavaScript controller.
+ */
 export type ControllerConfig<Parameter extends Enum> = {
 	parameters?: ParametersConfig<Parameter>;
 	managedState?: boolean;
@@ -27,21 +37,51 @@ export type ControllerEvents<Parameter, State, ProcessorState> = {
 	processorStateUpdate: (state: ProcessorState) => void;
 };
 
+/**
+ * Controller implements high-level functionality
+ * to interact with the C++ VST controller from JavaScript.
+ * It should be instanciated used as a singleton.
+ *
+ * @param Parameter A TypeScript union with all the existing parmeter names.
+ * This can be obtained from an object's keys by using `keyof typeof myObject`.
+ * @param State State type definition.
+ * @param ProcessorState ProcessorState type definition.
+ */
 class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> extends TypedEmitter<
 	ControllerEvents<Parameter, State, ProcessorState>
 > {
+	/**
+	 * Always up-to-date controller state.
+	 */
 	state!: State;
 
+	/**
+	 * Processor state from last host update (may no be up to date).
+	 */
 	initialProcessorState!: ProcessorState;
 
+	/**
+	 * Always up-to-date parameters values.
+	 */
 	parameters = {} as ParametersValues<Parameter>;
 
+	/**
+	 * Bridge instance that can be used
+	 * for creating custom cross-language callbacks.
+	 */
 	bridge = new Bridge();
 
 	private tagsByName = {} as ParametersValues<Parameter>;
 
 	private namesByTag = {} as { [tag: number]: Parameter };
 
+	/**
+	 * It is recommended to only have one {@link Controller | Controller}.
+	 *
+	 * @param config Controller configuration.
+	 * The `managedState` boolean toggles [managed state functionality](https://TODO) (enabled by default).
+	 * The `parameters` object refers to the contents of the `parameters.json` file.
+	 */
 	constructor(public config: ControllerConfig<Parameter>) {
 		/* eslint-disable-next-line constructor-super */
 		super();
@@ -51,6 +91,10 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 		}
 	}
 
+	/**
+	 * Entry initialization function that should be called
+	 * prior doing anything with the controller.
+	 */
 	async initialize(): Promise<void> {
 		if (this.config.parameters) {
 			enumEntries(this.config.parameters).forEach(([name, config], index) => {
@@ -59,7 +103,7 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 				this.namesByTag[index] = name;
 			});
 
-			this.bridge.register('updateParameter', (tag: ParameterTag, value: ParameterValue) => {
+			this.bridge.register('updateParameter', (tag: ParameterID, value: ParameterValue) => {
 				const name = this.namesByTag[tag];
 				this.parameters[name] = value;
 				this.emit('parameterUpdate', name, value);
@@ -88,11 +132,25 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 		}
 	}
 
+	/**
+	 * Can be used to request a parameter change to the host.
+	 *
+	 * @param name Name of parameter to update.
+	 * @param value New normalized float value.
+	 */
 	editParameter(name: Parameter, value: ParameterValue): void {
 		this.bridge.call('editParameter', this.tagsByName[name], value);
 		this.parameters[name] = value;
 	}
 
+	/**
+	 * Can be used to store persistent data.
+	 * Everything that is passed to `updateState()`
+	 * will be stored and restored when the host saves / loads
+	 * the plugin's state.
+	 *
+	 * @param changes Modifications to merge with the current state.
+	 */
 	updateState(changes: Partial<State>): void {
 		Object.assign(this.state, changes);
 		this.bridge.call('setState', this.state);
