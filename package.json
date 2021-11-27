@@ -25,7 +25,8 @@
 	"scripts": {
 		"start": "ts-node src/cli/index.ts",
 		"build": "tsc && chmod +x lib/src/cli/index.js",
-		"watch": "tsc -w"
+		"watch": "tsc -w",
+		"docs": "typedoc --excludePrivate --excludeProtected --out docs src/api/index.ts"
 	},
 	"dependencies": {
 		"change-case": "^4.1.2",
