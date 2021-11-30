@@ -138,8 +138,8 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 	 * @param name Name of parameter to update.
 	 * @param value New normalized float value.
 	 */
-	editParameter(name: Parameter, value: ParameterValue): void {
-		this.bridge.call('editParameter', this.tagsByName[name], value);
+	updateParameter(name: Parameter, value: ParameterValue): void {
+		this.bridge.call('updateParameter', this.tagsByName[name], value);
 		this.parameters[name] = value;
 	}
 
