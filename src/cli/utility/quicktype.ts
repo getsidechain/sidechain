@@ -9,7 +9,7 @@ function spawnQuicktype(...args: string[]): Promise<string> {
 	return executeBinary(require.resolve('quicktype'), ...args);
 }
 
-function writeMultiSourceFile(code: string, directory: string): void {
+function writeMultiSourceFile(code: string, directory: string, omit?: string[]): void {
 	let typeName;
 	const resolvedDirectory = path.resolve(directory);
 	fs.rmSync(path.join(resolvedDirectory, 'Generators.hpp'), { force: true });
@@ -27,7 +27,11 @@ function writeMultiSourceFile(code: string, directory: string): void {
 
 			const body = lines.slice(1).join(os.EOL);
 			const outputPath = `${resolvedDirectory}/${filename}`;
-			fs.writeFileSync(outputPath, body);
+
+			if (!omit?.includes(filename)) {
+				fs.writeFileSync(outputPath, body);
+			}
+
 			if (filename !== 'Generators.hpp' && filename !== 'helper.hpp') {
 				typeName = path.basename(filename, '.hpp');
 			}

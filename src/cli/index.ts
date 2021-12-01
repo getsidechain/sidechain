@@ -17,7 +17,17 @@ function main() {
 			alias: 'output',
 		});
 
-		cli.command('schema [paths..]', 'Generate C++ definitions from TypeScript types', () => {}, spawnGenerateSchema);
+		cli.command(
+			'schema [paths..]',
+			'Generate C++ definitions from TypeScript types',
+			(cli) => {
+				cli.option('n', {
+					desc: 'Namespace to generate C++ classes into',
+					alias: 'namespace',
+				});
+			},
+			spawnGenerateSchema,
+		);
 
 		cli.command(
 			'parameters <path>',

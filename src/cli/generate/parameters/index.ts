@@ -34,14 +34,15 @@ async function spawnGenerateParameters(args: GenerateParametersArgs): Promise<vo
 		'--source-style',
 		'multi-source',
 		'--namespace',
-		'Parameter',
+		'Schema',
 		tempFile,
 	);
 
-	writeMultiSourceFile(output, args.output);
+	writeMultiSourceFile(output, args.output, ['helper.hpp']);
 
 	const parameterHpp = path.join(path.resolve(args.output), 'ParameterSchema.hpp');
 	replaceInFile(parameterHpp, /enum class/gu, 'enum');
+	replaceInFile(parameterHpp, /namespace Schema/gu, 'namespace Parameter');
 	fs.appendFileSync(
 		parameterHpp,
 		`
@@ -53,6 +54,8 @@ namespace Schema {
 }
 		`,
 	);
+
+	replaceInFile(path.join(path.resolve(args.output), 'Parameter.hpp'), /Schema::Parameter/gu, 'Parameter::Parameter');
 }
 
 export default spawnGenerateParameters;

@@ -5,6 +5,7 @@ import spawnQuicktype, { writeMultiSourceFile } from '../../utility/quicktype';
 type GenerateSchemaArgs = {
 	output: string;
 	paths: string[];
+	namespace?: string;
 };
 
 async function spawnGenerateSchema(args: GenerateSchemaArgs): Promise<void> {
@@ -25,7 +26,7 @@ async function spawnGenerateSchema(args: GenerateSchemaArgs): Promise<void> {
 			'--source-style',
 			'multi-source',
 			'--namespace',
-			'Schema',
+			args.namespace || 'Schema',
 			path.resolve(source),
 		);
 
