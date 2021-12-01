@@ -1,5 +1,4 @@
 import fs from 'fs';
-import os from 'os';
 import path from 'path';
 
 import spawnQuicktype, { writeMultiSourceFile } from '../../utility/quicktype';
@@ -13,14 +12,24 @@ type GenerateParametersArgs = {
 
 async function spawnGenerateParameters(args: GenerateParametersArgs): Promise<void> {
 	const module = await import(path.resolve(args.path));
-	const parameters = module.default as { [name: string]: ParameterConfig };
 
-	const tsUnion = `type Parameter = ${Object.keys(parameters)
+	let parameters: { [name: string]: ParameterConfig };
+	if (typeof module.default === 'function') {
+		parameters = await module.default();
+	} else {
+		parameters = module.default;
+	}
+
+	const tsUnion = `
+type Parameter = ${Object.keys(parameters)
 		.map((name) => `'${name}'`)
-		.join('|')}`;
+		.join('|')}
 
-	const tempFile = `${os.tmpdir()}/studiobridge_parameters.ts`;
-	fs.writeFileSync(tempFile, tsUnion);
+export default Parameter;
+	`;
+
+	const tsEnumFilePath = path.join(path.resolve(args.output), 'Parameter.ts');
+	fs.writeFileSync(tsEnumFilePath, tsUnion);
 
 	const output = await spawnQuicktype(
 		'-l',
@@ -35,7 +44,7 @@ async function spawnGenerateParameters(args: GenerateParametersArgs): Promise<vo
 		'multi-source',
 		'--namespace',
 		'Schema',
-		tempFile,
+		tsEnumFilePath,
 	);
 
 	writeMultiSourceFile(output, args.output, ['helper.hpp']);
