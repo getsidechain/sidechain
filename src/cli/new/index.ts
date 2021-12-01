@@ -93,15 +93,6 @@ async function spawnNew(): Promise<void> {
 	replaceInFile(infoH, placeholders.binaryProcessorUID, formatBinaryVSTID(processorUID));
 	replaceInFile(infoH, placeholders.binaryControllerUID, formatBinaryVSTID(controllerUID));
 
-	const entryCpp = `${paramCaseName}/src/entry.cpp`;
-	replaceInFile(entryCpp, placeholders.name, pascalCaseName);
-
-	const processorHpp = `${paramCaseName}/src/processor/Processor.hpp`;
-	replaceInFile(processorHpp, placeholders.name, pascalCaseName);
-
-	const processorCpp = `${paramCaseName}/src/processor/Processor.cpp`;
-	replaceInFile(processorCpp, placeholders.name, pascalCaseName);
-
 	const newSnapshotName = placeholders.snapshotName.replace(placeholders.processorUID, processorUID);
 	fs.renameSync(`${paramCaseName}/public/${placeholders.snapshotName}`, `${paramCaseName}/public/${newSnapshotName}`);
 
