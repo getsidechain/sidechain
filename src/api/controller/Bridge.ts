@@ -124,11 +124,7 @@ class Bridge {
 							return;
 						}
 
-						if (Array.isArray(result)) {
-							this.send('resolve', method, ...result);
-						} else {
-							this.send('resolve', method, result);
-						}
+						this.send('resolve', method, result);
 					} catch (error) {
 						if (error instanceof Error) {
 							this.send('reject', method, error.message);
