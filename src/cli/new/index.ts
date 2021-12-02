@@ -111,10 +111,6 @@ Next steps:
 
   cd ${paramCaseName}
 
-Start UI development server:
-
-  yarn start
-
 Build CMake project:
 
   mkdir build
@@ -125,9 +121,11 @@ Build CMake project:
 Target plugin will be automatically installed
 and can be tested right away.
 
-Additional documentation:
-  Setting up debugging with VS Code : https://studiobridge.com/docs/...
-  Developing UI within your browser : https://studiobridge.com/docs/...`);
+Start UI development server:
+
+  yarn start
+
+Additional documentation: https://studiobridge.netlify.app/docs/basics/getting-started`);
 }
 
 export default spawnNew;
