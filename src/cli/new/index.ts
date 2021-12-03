@@ -72,7 +72,7 @@ async function spawnNew(): Promise<void> {
 
 	console.info();
 	logger.info('Creating project files...');
-	await executeBinarySilent('git', 'clone', 'git@github.com:getstudiobridge/example.git', paramCaseName);
+	await executeBinarySilent('git', 'clone', '--recursive', 'git@github.com:getstudiobridge/example.git', paramCaseName);
 	remove(`${paramCaseName}/.git`);
 
 	const cmakelistsTxt = `${paramCaseName}/CMakeLists.txt`;
