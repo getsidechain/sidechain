@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { constantCase } from 'change-case';
 
 import spawnQuicktype, { writeMultiSourceFile } from '../../utility/quicktype';
 import { ParameterConfig } from '../../../api/schemas/ParameterConfig';
@@ -46,7 +47,6 @@ export default Parameter;
 		'Schema',
 		tsEnumFilePath,
 	);
-
 	writeMultiSourceFile(output, args.output, ['helper.hpp']);
 
 	const parameterHpp = path.join(path.resolve(args.output), 'ParameterSchema.hpp');
@@ -62,6 +62,10 @@ namespace Schema {
 	};
 }
 		`,
+	);
+
+	Object.keys(parameters).forEach((parameter, index) =>
+		replaceInFile(parameterHpp, constantCase(parameter), `${constantCase(parameter)} = ${index}`),
 	);
 
 	replaceInFile(path.join(path.resolve(args.output), 'Parameter.hpp'), /Schema::Parameter/gu, 'Parameter::Parameter');
