@@ -25,16 +25,19 @@ const prompts: PromptObject[] = [
 		type: 'text',
 		name: 'website',
 		message: 'What is the website of your company?',
+		initial: 'https://example.com',
 	},
 	{
 		type: 'text',
 		name: 'email',
 		message: 'What is the contact email of your company?',
+		initial: 'hello@example.com',
 	},
 	{
 		type: 'text',
 		name: 'category',
 		message: 'In which category belongs your plugin?',
+		initial: 'Fx',
 	},
 	{
 		type: 'text',
@@ -73,37 +76,44 @@ async function spawnNew(): Promise<void> {
 	console.info();
 	logger.info('Creating project files...');
 	await executeBinarySilent('git', 'clone', '--recursive', 'git@github.com:getstudiobridge/example.git', paramCaseName);
-	remove(`${paramCaseName}/.git`);
+	process.chdir(paramCaseName);
 
-	const cmakelistsTxt = `${paramCaseName}/CMakeLists.txt`;
-	replaceInFile(cmakelistsTxt, placeholders.name, pascalCaseName);
-	replaceInFile(cmakelistsTxt, placeholders.version, `STUDIO_BRIDGE_VERSION ${version}`);
-	replaceInFile(cmakelistsTxt, placeholders.processorUID, processorUID);
-	replaceInFile(cmakelistsTxt, placeholders.bundleIdentifier, bundleIdentifier);
+	remove('.git');
+	await executeBinarySilent('git', 'init');
 
-	const packageJson = `${paramCaseName}/package.json`;
-	replaceInFile(packageJson, placeholders.name, paramCaseName);
+	remove('vendor/json');
+	await executeBinarySilent('git', 'submodule', 'add', 'https://github.com/nlohmann/json', 'vendor/json');
 
-	const infoH = `${paramCaseName}/src/info.h`;
-	replaceInFile(infoH, placeholders.name, name);
-	replaceInFile(infoH, placeholders.vendor, vendor);
-	replaceInFile(infoH, placeholders.website, website);
-	replaceInFile(infoH, placeholders.email, email);
-	replaceInFile(infoH, placeholders.category, category);
-	replaceInFile(infoH, placeholders.binaryProcessorUID, formatBinaryVSTID(processorUID));
-	replaceInFile(infoH, placeholders.binaryControllerUID, formatBinaryVSTID(controllerUID));
+	remove('vendor/vst3sdk');
+	await executeBinarySilent('git', 'submodule', 'add', 'https://github.com/steinbergmedia/vst3sdk', 'vendor/vst3sdk');
+	process.chdir('vendor/vst3sdk');
+	await executeBinarySilent('git', 'submodule', 'update', '--init', '--recursive');
+	process.chdir('../..');
+
+	replaceInFile('CMakeLists.txt', placeholders.name, pascalCaseName);
+	replaceInFile('CMakeLists.txt', placeholders.version, `STUDIO_BRIDGE_VERSION ${version}`);
+	replaceInFile('CMakeLists.txt', placeholders.processorUID, processorUID);
+	replaceInFile('CMakeLists.txt', placeholders.bundleIdentifier, bundleIdentifier);
+
+	replaceInFile('package.json', placeholders.name, paramCaseName);
+	replaceInFile('public/index.html', placeholders.name, name);
+
+	replaceInFile('src/info.h', placeholders.name, name);
+	replaceInFile('src/info.h', placeholders.vendor, vendor);
+	replaceInFile('src/info.h', placeholders.website, website);
+	replaceInFile('src/info.h', placeholders.email, email);
+	replaceInFile('src/info.h', placeholders.category, category);
+	replaceInFile('src/info.h', placeholders.binaryProcessorUID, formatBinaryVSTID(processorUID));
+	replaceInFile('src/info.h', placeholders.binaryControllerUID, formatBinaryVSTID(controllerUID));
 
 	const newSnapshotName = placeholders.snapshotName.replace(placeholders.processorUID, processorUID);
-	fs.renameSync(`${paramCaseName}/public/${placeholders.snapshotName}`, `${paramCaseName}/public/${newSnapshotName}`);
+	fs.renameSync(`public/${placeholders.snapshotName}`, `public/${newSnapshotName}`);
 
 	const newSnapshot2xName = placeholders.snapshot2xName.replace(placeholders.processorUID, processorUID);
-	fs.renameSync(
-		`${paramCaseName}/public/${placeholders.snapshot2xName}`,
-		`${paramCaseName}/public/${newSnapshot2xName}`,
-	);
+	fs.renameSync(`public/${placeholders.snapshot2xName}`, `public/${newSnapshot2xName}`);
 
 	logger.info('Installing JavaScript dependencies using Yarn...');
-	await executeBinarySilent('yarn', '--cwd', paramCaseName);
+	await executeBinarySilent('yarn');
 
 	logger.info(`Done.
 
