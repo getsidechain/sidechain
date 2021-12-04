@@ -11,7 +11,7 @@ export type ParameterValue = number;
 /**
  * Key / value map containing all parameters values.
  */
-export type ParametersValues<Parameter extends Enum> = {
+export type ParametersValues<Parameter extends Enum = string> = {
 	[key in Parameter]: ParameterValue;
 };
 
@@ -19,14 +19,14 @@ export type ParametersValues<Parameter extends Enum> = {
  * Parameters configuration map,
  * corresponding to the format of the `parameters.json` file.
  */
-export type ParametersConfig<Parameter extends Enum> = {
+export type ParametersConfig<Parameter extends Enum = string> = {
 	[key in Parameter]: ParameterConfig;
 };
 
 /**
  * Main configuration for the JavaScript controller.
  */
-export type ControllerConfig<Parameter extends Enum> = {
+export type ControllerConfig<Parameter extends Enum = string> = {
 	parameters?: ParametersConfig<Parameter>;
 	managedState?: boolean;
 };
