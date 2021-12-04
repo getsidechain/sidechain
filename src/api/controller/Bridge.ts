@@ -141,8 +141,12 @@ class Bridge {
 				break;
 
 			case 'reject':
-				this.pendingCalls[method].reject(args[2] as string);
-				delete this.pendingCalls[method];
+				if (this.pendingCalls[method]) {
+					this.pendingCalls[method].reject(args[2] as string);
+					delete this.pendingCalls[method];
+				} else {
+					throw new Error(args[2] as string);
+				}
 				break;
 
 			default:
