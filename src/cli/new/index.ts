@@ -115,13 +115,13 @@ async function spawnNew(): Promise<void> {
 	replaceInFile('package.json', placeholders.name, paramCaseName);
 	replaceInFile('public/index.html', placeholders.name, name);
 
-	replaceInFile('src/info.h', placeholders.name, name);
-	replaceInFile('src/info.h', placeholders.vendor, vendor);
-	replaceInFile('src/info.h', placeholders.website, website);
-	replaceInFile('src/info.h', placeholders.email, email);
-	replaceInFile('src/info.h', placeholders.category, category);
-	replaceInFile('src/info.h', placeholders.binaryProcessorUID, formatBinaryVSTID(processorUID));
-	replaceInFile('src/info.h', placeholders.binaryControllerUID, formatBinaryVSTID(controllerUID));
+	replaceInFile('src/info.hpp', placeholders.name, name);
+	replaceInFile('src/info.hpp', placeholders.vendor, vendor);
+	replaceInFile('src/info.hpp', placeholders.website, website);
+	replaceInFile('src/info.hpp', placeholders.email, email);
+	replaceInFile('src/info.hpp', placeholders.category, category);
+	replaceInFile('src/info.hpp', placeholders.binaryProcessorUID, formatBinaryVSTID(processorUID));
+	replaceInFile('src/info.hpp', placeholders.binaryControllerUID, formatBinaryVSTID(controllerUID));
 
 	const newSnapshotName = placeholders.snapshotName.replace(
 		placeholders.processorUID,
