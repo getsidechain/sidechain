@@ -1,6 +1,10 @@
 import { spawn } from 'child_process';
 
-function executeBinaryWithOptions(silent: boolean, binary: string, ...args: string[]): Promise<string> {
+function executeBinaryWithOptions(
+	silent: boolean,
+	binary: string,
+	...args: string[]
+): Promise<string> {
 	let stdout = '';
 	let stderr = '';
 

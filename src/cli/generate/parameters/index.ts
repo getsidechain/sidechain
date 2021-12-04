@@ -68,7 +68,11 @@ namespace Schema {
 		replaceInFile(parameterHpp, constantCase(parameter), `${constantCase(parameter)} = ${index}`),
 	);
 
-	replaceInFile(path.join(path.resolve(args.output), 'Parameter.hpp'), /Schema::Parameter/gu, 'Parameter::Parameter');
+	replaceInFile(
+		path.join(path.resolve(args.output), 'Parameter.hpp'),
+		/Schema::Parameter/gu,
+		'Parameter::Parameter',
+	);
 }
 
 export default spawnGenerateParameters;

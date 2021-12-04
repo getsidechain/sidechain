@@ -37,7 +37,10 @@ function writeMultiSourceFile(code: string, directory: string, omit?: string[]):
 			}
 		});
 
-	fs.renameSync(`${resolvedDirectory}/${typeName}.hpp`, `${resolvedDirectory}/${typeName}Schema.hpp`);
+	fs.renameSync(
+		`${resolvedDirectory}/${typeName}.hpp`,
+		`${resolvedDirectory}/${typeName}Schema.hpp`,
+	);
 	fs.renameSync(`${resolvedDirectory}/Generators.hpp`, `${resolvedDirectory}/${typeName}.hpp`);
 	replaceInFile(
 		`${resolvedDirectory}/${typeName}.hpp`,

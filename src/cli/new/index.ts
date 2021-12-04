@@ -75,17 +75,34 @@ async function spawnNew(): Promise<void> {
 
 	console.info();
 	logger.info('Creating project files...');
-	await executeBinarySilent('git', 'clone', 'git@github.com:getstudiobridge/example.git', paramCaseName);
+	await executeBinarySilent(
+		'git',
+		'clone',
+		'git@github.com:getstudiobridge/example.git',
+		paramCaseName,
+	);
 	process.chdir(paramCaseName);
 
 	remove('.git');
 	await executeBinarySilent('git', 'init');
 
 	remove('vendor/json');
-	await executeBinarySilent('git', 'submodule', 'add', 'https://github.com/nlohmann/json', 'vendor/json');
+	await executeBinarySilent(
+		'git',
+		'submodule',
+		'add',
+		'https://github.com/nlohmann/json',
+		'vendor/json',
+	);
 
 	remove('vendor/vst3sdk');
-	await executeBinarySilent('git', 'submodule', 'add', 'https://github.com/steinbergmedia/vst3sdk', 'vendor/vst3sdk');
+	await executeBinarySilent(
+		'git',
+		'submodule',
+		'add',
+		'https://github.com/steinbergmedia/vst3sdk',
+		'vendor/vst3sdk',
+	);
 	process.chdir('vendor/vst3sdk');
 	await executeBinarySilent('git', 'submodule', 'update', '--init', '--recursive');
 	process.chdir('../..');
@@ -106,10 +123,16 @@ async function spawnNew(): Promise<void> {
 	replaceInFile('src/info.h', placeholders.binaryProcessorUID, formatBinaryVSTID(processorUID));
 	replaceInFile('src/info.h', placeholders.binaryControllerUID, formatBinaryVSTID(controllerUID));
 
-	const newSnapshotName = placeholders.snapshotName.replace(placeholders.processorUID, processorUID);
+	const newSnapshotName = placeholders.snapshotName.replace(
+		placeholders.processorUID,
+		processorUID,
+	);
 	fs.renameSync(`public/${placeholders.snapshotName}`, `public/${newSnapshotName}`);
 
-	const newSnapshot2xName = placeholders.snapshot2xName.replace(placeholders.processorUID, processorUID);
+	const newSnapshot2xName = placeholders.snapshot2xName.replace(
+		placeholders.processorUID,
+		processorUID,
+	);
 	fs.renameSync(`public/${placeholders.snapshot2xName}`, `public/${newSnapshot2xName}`);
 
 	logger.info('Installing JavaScript dependencies using Yarn...');
