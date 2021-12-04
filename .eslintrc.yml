@@ -20,19 +20,12 @@ globals:
   __dirname: true
 
 rules:
-  quotes:
-    - error
-    - single
   jsx-quotes:
     - error
     - prefer-single
   comma-dangle:
     - error
     - always-multiline
-  indent:
-    - error
-    - tab
-    - SwitchCase: 1
   func-style:
     - error
     - declaration
@@ -64,6 +57,8 @@ rules:
         - '/'
   object-property-newline: warn
   no-negated-condition: warn
+  quotes: 'off'
+  indent: 'off'
   dot-location: 'off'
   no-undefined: 'off'
   init-declarations: 'off'
