@@ -22,7 +22,7 @@ async function spawnGenerateParameters(args: GenerateParametersArgs): Promise<vo
 	}
 
 	const tsUnion = `
-type Parameter = ${Object.keys(parameters)
+export type Parameter = ${Object.keys(parameters)
 		.map((name) => `'${name}'`)
 		.join('|')}
 
