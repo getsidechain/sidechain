@@ -138,9 +138,13 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 	 * @param name Name of parameter to update.
 	 * @param value New normalized float value.
 	 */
-	updateParameter(name: Parameter, value: ParameterValue): void {
-		this.bridge.call('updateParameter', this.tagsByName[name], value);
-		this.parameters[name] = value;
+	updateParameter(
+		name: Parameter,
+		value: ParameterValue | ((value: ParameterValue) => ParameterValue),
+	): void {
+		const resolvedValue = typeof value === 'function' ? value(this.parameters[name]) : value;
+		this.bridge.call('updateParameter', this.tagsByName[name], resolvedValue);
+		this.parameters[name] = resolvedValue;
 	}
 
 	/**
@@ -151,8 +155,9 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 	 *
 	 * @param changes Modifications to merge with the current state.
 	 */
-	updateState(changes: Partial<State>): void {
-		Object.assign(this.state, changes);
+	updateState(changes: Partial<State> | ((state: State) => Partial<State>)): void {
+		const resolvedChanges = typeof changes === 'function' ? changes(this.state) : changes;
+		Object.assign(this.state, resolvedChanges);
 		this.bridge.call('setState', this.state);
 		this.emit('stateUpdate', this.state);
 	}
