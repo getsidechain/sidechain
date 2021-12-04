@@ -41,8 +41,6 @@ export default Parameter;
 		'global-include',
 		'--enum-type',
 		'unsigned int',
-		'--wstring',
-		'use-wstring',
 		'--source-style',
 		'multi-source',
 		'--namespace',
@@ -51,11 +49,11 @@ export default Parameter;
 	);
 	writeMultiSourceFile(output, args.output, ['helper.hpp']);
 
-	const parameterHpp = path.join(path.resolve(args.output), 'ParameterSchema.hpp');
-	replaceInFile(parameterHpp, /enum class/gu, 'enum');
-	replaceInFile(parameterHpp, /namespace Schema/gu, 'namespace Parameter');
+	const parameterSchemaHpp = path.join(path.resolve(args.output), 'ParameterSchema.hpp');
+	replaceInFile(parameterSchemaHpp, /enum class/gu, 'enum');
+	replaceInFile(parameterSchemaHpp, /namespace Schema/gu, 'namespace Parameter');
 	fs.appendFileSync(
-		parameterHpp,
+		parameterSchemaHpp,
 		`
 namespace Schema {
 	class ParametersConfig {
@@ -67,14 +65,15 @@ namespace Schema {
 	);
 
 	Object.keys(parameters).forEach((parameter, index) =>
-		replaceInFile(parameterHpp, constantCase(parameter), `${constantCase(parameter)} = ${index}`),
+		replaceInFile(
+			parameterSchemaHpp,
+			constantCase(parameter),
+			`${constantCase(parameter)} = ${index}`,
+		),
 	);
 
-	replaceInFile(
-		path.join(path.resolve(args.output), 'Parameter.hpp'),
-		/Schema::Parameter/gu,
-		'Parameter::Parameter',
-	);
+	const parametersHpp = path.join(path.resolve(args.output), 'Parameter.hpp');
+	replaceInFile(parametersHpp, /Schema::Parameter/gu, 'Parameter::Parameter');
 }
 
 export default spawnGenerateParameters;

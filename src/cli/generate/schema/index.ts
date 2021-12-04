@@ -21,8 +21,6 @@ async function spawnGenerateSchema(args: GenerateSchemaArgs): Promise<void> {
 			'global-include',
 			'--enum-type',
 			'unsigned int',
-			'--wstring',
-			'use-wstring',
 			'--source-style',
 			'multi-source',
 			'--namespace',
