@@ -19,9 +19,15 @@ jobs:
       - name: Bump react package version
         run: "sed -i 's/\\(\"version\": \"\\).*\"/\\1${{ github.event.client_payload.version }}\"/g' package.json"
       - name: Install dependencies
-        run: yarn && yarn --cwd react
+        run: yarn
+      - name: Install react package dependencies
+        run: yarn --cwd react
+      - name: Link packages
+        run: yarn link && yarn --cwd react link foobartestxyz
       - name: Compile
-        run: yarn build && yarn --cwd react build
+        run: yarn build
+      - name: Compile react package
+        run: yarn --cwd react build
       - name: Authenticate with NPM
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Publish NPM package
