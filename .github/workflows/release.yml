@@ -12,20 +12,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          submodules: true
       - name: Bump version
         run: "sed -i 's/\\(\"version\": \"\\).*\"/\\1${{ github.event.client_payload.version }}\"/g' package.json"
-      - name: Commit release
-        uses: stefanzweifel/git-auto-commit-action@v4.12.0
-        id: commit
-        with:
-          commit_message: 'release: ${{ github.event.client_payload.version }}'
-          file_pattern: package.json
-          commit_user_name: ${{ secrets.RELEASE_COMMIT_USER_NAME }}
-          commit_user_email: ${{ secrets.RELEASE_COMMIT_USER_EMAIL }}
+      - name: Bump react package version
+        run: "sed -i 's/\\(\"version\": \"\\).*\"/\\1${{ github.event.client_payload.version }}\"/g' package.json"
       - name: Install dependencies
-        run: yarn
+        run: yarn && yarn --cwd react
       - name: Compile
-        run: yarn build
+        run: yarn build && yarn build --cwd react
       - name: Authenticate with NPM
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Publish NPM package
@@ -37,7 +33,6 @@ jobs:
           tag_name: ${{ github.event.client_payload.version }}
           release_name: ${{ github.event.client_payload.version }}
           body: '${{ github.event.client_payload.notes }}'
-          commitish: ${{ steps.commit.outputs.commit_hash }}
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Notify SDK repository
