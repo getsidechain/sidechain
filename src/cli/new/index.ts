@@ -49,7 +49,7 @@ const prompts: PromptObject[] = [
 
 const placeholders = {
 	name: /[S|s]tudio[B|b]ridge[E|e]xample/gu,
-	vendor: /Studio Bridge/gu,
+	vendor: /Bounce/gu,
 	website: /https:\/\/github\.com\/getbounce\/bounce/gu,
 	email: /hello@bounce\.com/gu,
 	category: /Fx/gu,

@@ -9,7 +9,7 @@ import spawnNew from './new';
 function main() {
 	const cli = yargs(process.argv.slice(2));
 
-	cli.command('new', 'Create a Studio Bridge project', () => {}, spawnNew);
+	cli.command('new', 'Create a Bounce project', () => {}, spawnNew);
 	cli.command('generate', 'Generate C++ code from TypeScript', (cli) => {
 		cli.option('o', {
 			demandOption: true,
