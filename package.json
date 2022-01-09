@@ -5,15 +5,15 @@
 	"license": "MIT",
 	"main": "lib/src/api",
 	"bin": {
-		"studiobridge": "lib/src/cli/index.js"
+		"bounce": "lib/src/cli/index.js"
 	},
 	"files": [
 		"lib"
 	],
-	"bugs": "https://github.com/getstudiobridge/studiobridge/issues",
+	"bugs": "https://github.com/getbounce/bounce/issues",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/getstudiobridge/studiobridge.git"
+		"url": "https://github.com/getbounce/bounce.git"
 	},
 	"keywords": [
 		"audio",

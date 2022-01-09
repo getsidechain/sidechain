@@ -50,14 +50,14 @@ const prompts: PromptObject[] = [
 const placeholders = {
 	name: /[S|s]tudio[B|b]ridge[E|e]xample/gu,
 	vendor: /Studio Bridge/gu,
-	website: /https:\/\/github\.com\/getstudiobridge\/studiobridge/gu,
-	email: /hello@studiobridge\.com/gu,
+	website: /https:\/\/github\.com\/getbounce\/bounce/gu,
+	email: /hello@bounce\.com/gu,
 	category: /Fx/gu,
-	version: /STUDIO_BRIDGE_VERSION 1\.0\.0/gu,
+	version: /BOUNCE_VERSION 1\.0\.0/gu,
 	processorUID: /7C41BB75B556527392439BEADC67B477/gu,
 	binaryProcessorUID: /0x7C41BB75, 0xB5565273, 0x92439BEA, 0xDC67B477/gu,
 	binaryControllerUID: /0x078FC5FA, 0xC5355F1F, 0x8A0C32A7, 0xEAB1BC9E/gu,
-	bundleIdentifier: /com\.studiobridge\.\$\{PROJECT\}/gu,
+	bundleIdentifier: /com\.bounce\.template\.\$\{PROJECT\}/gu,
 	snapshotName: '7C41BB75B556527392439BEADC67B477_snapshot.png',
 	snapshot2xName: '7C41BB75B556527392439BEADC67B477_snapshot_2.0x.png',
 };
@@ -75,12 +75,7 @@ async function spawnNew(): Promise<void> {
 
 	console.info();
 	logger.info('Creating project files...');
-	await executeBinarySilent(
-		'git',
-		'clone',
-		'git@github.com:getstudiobridge/example.git',
-		paramCaseName,
-	);
+	await executeBinarySilent('git', 'clone', 'git@github.com:getbounce/example.git', paramCaseName);
 	process.chdir(paramCaseName);
 
 	remove('.git');
@@ -108,7 +103,7 @@ async function spawnNew(): Promise<void> {
 	process.chdir('../..');
 
 	replaceInFile('CMakeLists.txt', placeholders.name, pascalCaseName);
-	replaceInFile('CMakeLists.txt', placeholders.version, `STUDIO_BRIDGE_VERSION ${version}`);
+	replaceInFile('CMakeLists.txt', placeholders.version, `BOUNCE_VERSION ${version}`);
 	replaceInFile('CMakeLists.txt', placeholders.processorUID, processorUID);
 	replaceInFile('CMakeLists.txt', placeholders.bundleIdentifier, bundleIdentifier);
 
@@ -158,7 +153,7 @@ Start UI development server:
 
   yarn start
 
-Additional documentation: https://studiobridge.netlify.app/docs/basics/getting-started`);
+Additional documentation: https://bounce.com/docs/basics/getting-started`);
 }
 
 export default spawnNew;
