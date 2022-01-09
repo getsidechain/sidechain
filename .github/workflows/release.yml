@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: yarn && yarn --cwd react
       - name: Compile
-        run: yarn build && yarn build --cwd react
+        run: yarn build && yarn --cwd react build
       - name: Authenticate with NPM
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Publish NPM package
