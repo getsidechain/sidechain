@@ -49,7 +49,7 @@ const prompts: PromptObject[] = [
 
 const placeholders = {
 	name: /[S|s]tudio[B|b]ridge[E|e]xample/gu,
-	vendor: /Sidechain/gu,
+	vendor: /Sidechain Inc\./gu,
 	website: /https:\/\/github\.com\/getsidechain\/sidechain/gu,
 	email: /hello@sidechain\.com/gu,
 	category: /Fx/gu,
