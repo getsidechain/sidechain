@@ -5,15 +5,15 @@
 	"license": "MIT",
 	"main": "lib/src/api",
 	"bin": {
-		"studiobridge": "lib/src/cli/index.js"
+		"sidechain": "lib/src/cli/index.js"
 	},
 	"files": [
 		"lib"
 	],
-	"bugs": "https://github.com/getstudiobridge/studiobridge/issues",
+	"bugs": "https://github.com/getsidechain/sidechain/issues",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/getstudiobridge/studiobridge.git"
+		"url": "https://github.com/getsidechain/sidechain.git"
 	},
 	"keywords": [
 		"audio",

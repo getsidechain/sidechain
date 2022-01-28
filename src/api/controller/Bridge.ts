@@ -36,7 +36,7 @@ class Bridge {
 	 * but is called from {@link Controller.initialize | Controller.initialize()}.
 	 */
 	async open(): Promise<void> {
-		if ('studiobridge' in window) {
+		if ('sidechain' in window) {
 			this.transport = new NativeTransport();
 		} else {
 			this.transport = new SocketTransport();
