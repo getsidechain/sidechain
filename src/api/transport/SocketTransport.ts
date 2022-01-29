@@ -12,7 +12,7 @@ class SocketTransport extends Transport {
 			this.socket.onerror = () =>
 				reject(
 					new Error(
-						`Could not connect to <code>"${address}"</code>.<br /><br /> Is the VST instance running and the window open?`,
+						`Could not connect to <code>"${address}"</code><br /><br /> Is the VST instance running and the window open?`,
 					),
 				);
 		});
