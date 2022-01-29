@@ -57,6 +57,7 @@ rules:
         - '/'
   object-property-newline: warn
   no-negated-condition: warn
+  no-use-before-define: 'off'
   quotes: 'off'
   indent: 'off'
   dot-location: 'off'

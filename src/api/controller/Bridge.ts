@@ -43,8 +43,14 @@ class Bridge {
 		}
 
 		this.transport.handleMessage = (args) => this.handleMessage(args);
-		await this.transport.open();
-		this.call('handleBridgeReady');
+
+		try {
+			await this.transport.open();
+		} catch (error) {
+			Bridge.showDisconnectionError((error as Error).message);
+		}
+
+		this.call('_handleBridgeReady');
 	}
 
 	/**
@@ -152,6 +158,46 @@ class Bridge {
 			default:
 		}
 	}
+
+	static showDisconnectionError(message: string): void {
+		const node = window.document.createElement('div');
+		node.innerHTML = createDisconnectionErrorHTML(message);
+		window.document.body.appendChild(node);
+	}
+}
+
+function createDisconnectionErrorHTML(message: string) {
+	return `
+	<div style="
+		position: fixed;
+		z-index: 1000;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(0, 0, 0, 0.8);
+		display: flex;
+		justify-content: center;
+	">
+		<div style="
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		">
+			<p style="color: white">
+				${message}
+			</p>
+			<a
+				href="#"
+				onclick="window.location.reload()"
+				style="color: white"
+			>
+				Reload
+			</a>
+		</div>
+	</div>
+`;
 }
 
 export default Bridge;

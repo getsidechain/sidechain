@@ -122,6 +122,10 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 			});
 		}
 
+		this.bridge.register('_blur', () =>
+			Bridge.showDisconnectionError('This window is not connected to a running VST instance.'),
+		);
+
 		await this.bridge.open();
 
 		if (this.config.managedState) {
