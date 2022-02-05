@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { TypedEmitter } from 'tiny-typed-emitter';
 
 import Bridge from './Bridge';
@@ -38,6 +39,25 @@ export type ControllerEvents<Parameter, State, ProcessorState> = {
 };
 
 /**
+ * Information about the plugin's license.
+ *
+ * active: true if license is valid
+ * metadata: Metadata associated with the license key
+ */
+export type License = {
+	active: boolean;
+	metadata: unknown;
+};
+
+/**
+ * Information about the hardware the plugin is running on.
+ */
+export type HostInfo = {
+	machineName: string;
+	machineID: string;
+};
+
+/**
  * Controller implements high-level functionality
  * to interact with the C++ VST controller from JavaScript.
  * It should be instanciated used as a singleton.
@@ -70,6 +90,11 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 	 * for creating custom cross-language callbacks.
 	 */
 	bridge = new Bridge();
+
+	license: License = {
+		active: false,
+		metadata: null as unknown,
+	};
 
 	private tagsByName = {} as ParametersValues<Parameter>;
 
@@ -127,6 +152,7 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 		);
 
 		await this.bridge.open();
+		this.license = await this.getLicense();
 
 		if (this.config.managedState) {
 			this.state = await this.bridge.callWithResult('getState');
@@ -164,6 +190,29 @@ class Controller<Parameter extends Enum = '', State = {}, ProcessorState = {}> e
 		Object.assign(this.state, resolvedChanges);
 		this.bridge.call('setState', this.state);
 		this.emit('stateUpdate', this.state);
+	}
+
+	async activateWithProductKey(productKey: string): Promise<boolean> {
+		const { data } = await axios.post(
+			`https://api.getsidechain.io/v1/keys/${productKey}/activate`,
+			await this.getHostInfo(),
+		);
+
+		return this.activateWithCertificate(data.certificate);
+	}
+
+	async activateWithCertificate(pemCertificate: string): Promise<boolean> {
+		await this.bridge.callWithResult('_activateWithCertificate', pemCertificate);
+		this.license = await this.getLicense();
+		return this.license.active;
+	}
+
+	getLicense(): Promise<License> {
+		return this.bridge.callWithResult('_getLicense');
+	}
+
+	getHostInfo(): Promise<HostInfo> {
+		return this.bridge.callWithResult('_getHostInfo');
 	}
 }
 
