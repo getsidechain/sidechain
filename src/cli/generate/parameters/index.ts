@@ -47,7 +47,7 @@ export default Parameter;
 		'Schema',
 		tsEnumFilePath,
 	);
-	writeMultiSourceFile(output, args.output, ['helper.hpp']);
+	writeMultiSourceFile(output, args.output, 'Schema', ['helper.hpp']);
 
 	const parameterSchemaHpp = path.join(path.resolve(args.output), 'ParameterSchema.hpp');
 	replaceInFile(parameterSchemaHpp, /enum class/gu, 'enum');

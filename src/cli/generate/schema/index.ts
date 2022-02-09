@@ -9,6 +9,8 @@ type GenerateSchemaArgs = {
 };
 
 async function spawnGenerateSchema(args: GenerateSchemaArgs): Promise<void> {
+	const namespace = args.namespace || 'Schema';
+
 	if (!args.paths) {
 		throw new Error('at least one source file must be specified');
 	}
@@ -24,11 +26,11 @@ async function spawnGenerateSchema(args: GenerateSchemaArgs): Promise<void> {
 			'--source-style',
 			'multi-source',
 			'--namespace',
-			args.namespace || 'Schema',
+			namespace,
 			path.resolve(source),
 		);
 
-		writeMultiSourceFile(code, args.output);
+		writeMultiSourceFile(code, args.output, namespace);
 	}
 }
 

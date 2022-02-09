@@ -1,19 +1,20 @@
-import { spawn } from 'child_process';
+import { SpawnOptions, spawn } from 'child_process';
 
 function executeBinaryWithOptions(
-	silent: boolean,
 	binary: string,
-	...args: string[]
+	args: string[],
+	silent: boolean,
+	options?: SpawnOptions,
 ): Promise<string> {
 	let stdout = '';
 	let stderr = '';
 
 	return new Promise((resolve, reject) => {
-		const process = spawn(binary, args);
+		const process = spawn(binary, args, options || {});
 
-		process.stdout.on('data', (data) => (stdout += data.toString()));
+		process.stdout?.on('data', (data) => (stdout += data.toString()));
 		if (!silent) {
-			process.stderr.on('data', (data) => (stderr += data.toString()));
+			process.stderr?.on('data', (data) => (stderr += data.toString()));
 		}
 
 		process.on('close', (code) => {
@@ -32,12 +33,12 @@ function executeBinaryWithOptions(
 }
 
 function executeBinarySilent(binary: string, ...args: string[]): Promise<string> {
-	return executeBinaryWithOptions(true, binary, ...args);
+	return executeBinaryWithOptions(binary, args, true);
 }
 
 function executeBinary(binary: string, ...args: string[]): Promise<string> {
-	return executeBinaryWithOptions(false, binary, ...args);
+	return executeBinaryWithOptions(binary, args, false);
 }
 
 export default executeBinary;
-export { executeBinarySilent };
+export { executeBinarySilent, executeBinaryWithOptions };

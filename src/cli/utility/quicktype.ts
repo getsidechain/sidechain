@@ -6,10 +6,15 @@ import executeBinary from './exec';
 import { replaceInFile } from './files';
 
 function spawnQuicktype(...args: string[]): Promise<string> {
-	return executeBinary(require.resolve('quicktype'), ...args);
+	return executeBinary('node', require.resolve('quicktype'), ...args);
 }
 
-function writeMultiSourceFile(code: string, directory: string, omit?: string[]): void {
+function writeMultiSourceFile(
+	code: string,
+	directory: string,
+	namespace: string,
+	omit?: string[],
+): void {
 	let typeName;
 	const resolvedDirectory = path.resolve(directory);
 	fs.rmSync(path.join(resolvedDirectory, 'Generators.hpp'), { force: true });
@@ -47,6 +52,13 @@ function writeMultiSourceFile(code: string, directory: string, omit?: string[]):
 		`#include "${typeName}.hpp"`,
 		`#include "${typeName}Schema.hpp"`,
 	);
+
+	replaceInFile(
+		`${resolvedDirectory}/${typeName}.hpp`,
+		`namespace nlohmann {`,
+		`namespace ${namespace} {`,
+	);
+	// replaceInFile(`${resolvedDirectory}/${typeName}.hpp`, /$/gu, `}`);
 }
 
 export default spawnQuicktype;
