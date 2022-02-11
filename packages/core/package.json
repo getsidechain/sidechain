@@ -1,0 +1,30 @@
+{
+	"name": "@foobartestxyz/core",
+	"description": "Build audio plugins using JavaScript",
+	"version": "0.0.0",
+	"license": "MIT",
+	"main": "lib",
+	"files": [
+		"lib"
+	],
+	"bugs": "https://github.com/getsidechain/sidechain/issues",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/getsidechain/sidechain.git"
+	},
+	"keywords": [
+		"audio",
+		"plugin",
+		"javascript",
+		"vst",
+		"react"
+	],
+	"scripts": {
+		"build": "tsc -p .",
+		"watch": "tsc -w"
+	},
+	"dependencies": {
+		"axios": "^0.25.0",
+		"tiny-typed-emitter": "^2.1.0"
+	}
+}

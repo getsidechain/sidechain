@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import { ParameterConfig } from '@foobartestxyz/core';
 import { constantCase } from 'change-case';
 
 import spawnQuicktype, { writeMultiSourceFile } from '../../utility/quicktype';
-import { ParameterConfig } from '../../../api/schemas/ParameterConfig';
 import { replaceInFile } from '../../utility/files';
 
 type GenerateParametersArgs = {

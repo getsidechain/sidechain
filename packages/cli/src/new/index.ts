@@ -6,7 +6,7 @@ import logger from '../logger';
 import { executeBinarySilent } from '../utility/exec';
 import { formatBinaryVSTID, generateUniqueVSTID } from './utility';
 import { remove, replaceInFile } from '../utility/files';
-import { version } from '../../../package.json';
+import { version } from '../../package.json';
 
 const prompts: PromptObject[] = [
 	{

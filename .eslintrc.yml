@@ -17,6 +17,7 @@ globals:
   window: true
   require: true
   WebSocket: true
+  JSX: true
   __dirname: true
 
 rules:
